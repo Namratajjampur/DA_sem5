@@ -24,6 +24,7 @@ path1='C:\\Users\\rames\\Downloads\\dataset\\fitness_data.csv'
 
 ```{r}
 s<-read.csv(file=path1)
+#reading csv and storing into dataframe fitness_data
 fitness_data <- data.frame(read.csv(file=path1,header=TRUE, sep=","))
 #fitness_data=na.omit(fitness_data)
 x<-dim(fitness_data)
@@ -37,7 +38,7 @@ x<-dim(fitness_data)
 transforms=list(list(type='filter',target=~subID,operation='=',value=unique(fitness_data$subID)))
 #transforms
 
-
+#getting names of all columns and choosing only the attributes that need to be analysed against timestamp
 colNames<- names(fitness_data)
 #colNames
 colNames<-colNames[-which(colNames=='timestamp..in.seconds.')]
@@ -53,7 +54,7 @@ colNames<-colNames[-which(colNames=='subID')]
 
 df<- fitness_data
 
-## Adding trace directly here
+## Adding trace directly here with first attribute of heart rate
 p <- plot_ly(
   
       fitness_data,
@@ -63,21 +64,24 @@ p <- plot_ly(
   #add_trace(y = ~heartrate.during.activity..bpm., name = 'trace 0',mode = 'lines') 
  y = ~heartrate.during.activity..bpm., 
   name=colNames[1],
+  #creating a filter to choose based on "subID"
     transforms=list(list(type='filter',target=~subID,operation='=',value=unique(fitness_data$subID)[1])),
  height=500
   )
 for (col in colNames[-1]) {
+#adding the rest of the attributes that need to be analyzed against timestamp
   p <- p %>% add_lines(x = ~c, y = fitness_data[[col]], name = col, visible = FALSE)
 }
 
 p <- p %>%
     layout(
       title = "Variation of parameters as subject performs activity over time ",
+      #creating a slider for the timestamp range(x axis)
      xaxis = list(title = "timestamp(in seconds)",rangeslider = list(type = "int",thickness=0.2)),
       yaxis = list(title = colNames[1]),
      showlegend = FALSE,
       updatemenus = list(
-        
+        #dropdown for each unique subID
        list( type='dropdown',active=0,
              x=1,
              y=1.6,
@@ -93,7 +97,7 @@ p <- p %>%
                list(method="restyle",args=list("transforms[0].value",unique(fitness_data$subID)[9]),label=unique(fitness_data$subID)[9])
               )
               ),
-        
+        #dropdown for each column
         list(
             y = 1.9,
             x=1,
