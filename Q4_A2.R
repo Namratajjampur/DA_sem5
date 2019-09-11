@@ -4,12 +4,14 @@ install.packages("dplyr")
 install.packages("ggplot2")
 install.packages("raster")
 install.packages("grid")
+install.packages("maps")
 library(rgdal)
 library(data.table)
 library(dplyr)
 library(ggplot2)
 library(raster)
 library(grid)
+library(maps)
 #Creating a dataframe of required data
 path1='C:\\Users\\chira\\OneDrive\\Desktop\\Semester 5\\Data Analytics\\Assignment 2\\DA19_A2_Datasets\\dataset\\Lok Sabha-2014 data.csv'
 loksabha=read.csv(path1, header=TRUE)
@@ -31,7 +33,8 @@ g <- ggplot(world, aes(long, lat)) +
   theme_bw()
 #plotting the % of voter turn out in the regions mentioned
 g <- g + 
-  geom_tile(data=required,aes(longitude, latitude, fill=Turnout)) +
+  #geom_tile(data=required,aes(longitude, latitude, fill=Turnout)) +
+stat_summary2d(data=required,aes(longitude, latitude, z=Turnout))+
   scale_fill_gradient(low="blue", high="red", name='Voter Turn Out %') +
   theme(
     legend.position = 'bottom',
