@@ -39,10 +39,12 @@ names(loksabha)
 ```
 
 
-```{r}
+```{r fig.height = 15}
 required <- subset(loksabha,select=c("longitude","latitude","VOTERS.TURN.OUT..IN...","Number.of.voters","MARGIN","PARTY"))
 names(required)[names(required) == "VOTERS.TURN.OUT..IN..."] <- "Turnout"
 required$Turnout=as.numeric(levels(required$Turnout))[required$Turnout]
+
+
 
 
 world <- map_data('world') %>% data.table() #getting the world map
@@ -57,8 +59,8 @@ g <- ggplot(world, aes(long, lat)) +
   theme_bw()
 #plotting the % of voter turn out in the regions mentioned
 g <- g + 
-  geom_point(data=required,aes(longitude, latitude,colour=Turnout))+
-  scale_color_gradient(low="blue", high="red")
+  geom_point(data=required,aes(longitude, latitude,colour=PARTY,size=MARGIN))+
+  #scale_color_gradient(low="blue", high="red")
   #scale_colour_gradient2()
   theme(
     legend.position = 'bottom',
