@@ -1,6 +1,6 @@
 ---
 title: "Assignment2"
-author: "ModelBehaviour"
+author: "ModelBehaviour PES1201700921 PES1201700246 PES12017001438"
 date: "10/09/2019"
 output: html_document
 ---
