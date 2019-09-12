@@ -1,0 +1,73 @@
+---
+title: "Assignment2_4"
+author: "Namrata R"
+date: "11/09/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+#install.packages("rgdal")
+#install.packages("data.table")
+#install.packages("dplyr")
+#install.packages("ggplot2")
+#install.packages("raster")
+#install.packages("grid")
+#install.packages("maps")
+library(rgdal)
+library(data.table)
+library(dplyr)
+library(ggplot2)
+library(raster)
+library(grid)
+library(maps)
+#Creating a dataframe of required data
+path1='C:\\Users\\chira\\OneDrive\\Desktop\\Semester 5\\Data Analytics\\Assignment 2\\DA19_A2_Datasets\\dataset\\Lok Sabha-2014 data.csv'
+loksabha=read.csv(path1, header=TRUE)
+loksabha<-na.omit(loksabha)
+required <- subset(loksabha,select=c("longitude","latitude","VOTERS.TURN.OUT..IN...","Number.of.voters","MARGIN","PARTY","CONSTITUENCY"))
+names(required)[names(required) == "VOTERS.TURN.OUT..IN..."] <- "Turnout"
+required$Turnout=as.numeric(levels(required$Turnout))[required$Turnout]
+required$Turnout<- required$Turnout/10
+```
+
+
+```{r fig.height = 8}
+#Removing the notable outlier whos coordinates do not lie in the region of elections. outlier was removed and not replaced as each constituency has a specific value and the value cannot be written along with the value of the outlier
+outvals= boxplot(required$longitude,plot=FALSE)$out
+required <-subset(required,!(longitude %in% outvals))
+
+world <- map_data('world') %>% data.table() #getting the world map
+world <- world[region=="India",] #getting India's region
+
+#plotting the map of india
+g <- ggplot(world, aes(long, lat)) + 
+  geom_polygon(aes(group=group),fill="white",colour="black",size=0.1) +
+  coord_equal() + 
+  scale_x_continuous(expand=c(0,0)) + 
+  scale_y_continuous(expand=c(0,0)) +
+  labs(x='Longitude', y='Latitude') +
+  theme_bw()
+
+#plotting the margin of victory with the party in the regions mentioned
+g <- g + 
+  geom_point(data=required,aes(longitude, latitude,colour=PARTY,size=Turnout, alpha=MARGIN))+
+  #scale_color_gradient(low="blue", high="red")
+  #scale_colour_gradient2()
+  theme(
+    legend.position = 'left',
+    legend.key.size = unit(2, "mm")
+  ) 
+
+#plot presentation
+g
+```
