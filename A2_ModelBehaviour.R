@@ -1,10 +1,3 @@
----
-title: "Assignment2"
-author: "ModelBehaviour"
-date: "10/09/2019"
-output: html_document
----
-```{r}
 #packages used 
 # packages that you will be using
 #install.packages("RColorBrewer")
@@ -36,23 +29,21 @@ library(reshape2)
 library(koRpus)
 library(textstem)
 library(plotly)
-```
-```{r}
+
+
 #paths for each question(specified by the number following the word Path)
 Path1="C:\\Users\\diyas\\Desktop\\SEM5\\Data_Analytics\\Assignment2\\dataset\\fitness_data.csv"
 Path2="C:\\Users\\diyas\\Desktop\\SEM5\\Data_Analytics\\Assignment2\\dataset\\subject.csv"
 Path4='C:\\Users\\diyas\\Desktop\\SEM5\\Data_Analytics\\Assignment2\\dataset\\Lok Sabha-2014 data.csv'
-Path5<- "C:\\Users\\diyas\\Desktop\\SEM5\\Data_Analytics\\Assignment2\\dataset\\tweets.txt"
+Path5="C:\\Users\\diyas\\Desktop\\SEM5\\Data_Analytics\\Assignment2\\dataset\\tweets.txt"
 
-```
 
-<h2>Question-1</h2>
-<h4>Library plotly helps make brilliant visualizations that are highly interactive and appealing. </h4>
-<h4> 1 a.)Use this library to visualize all the parameters in fitness_data.csv(except activityID, subID and timestamp(s)) against timestamp(x-axis) for each subID </h4>
-<h4>1b. To represent in a single graph, use dropdown menus. First dropdown menu will be used to select the subID. Second dropdown menu will be used to select the column to be analyzed. (For eg: User wants to visualize heart rate activity column(dropdown 1) for subID 104(dropdown 2)) </h4>
-<h4>1c Use a slider to control the range of timestamp. </h4>
-<h4>1d What insights could you glean from this plot? (There is no single correct answer) </h4>
-```{r}
+#Question-1:Library plotly helps make brilliant visualizations that are highly interactive and appealing. 
+#1a.)Use this library to visualize all the parameters in fitness_data.csv(except activityID, subID and timestamp(s)) against timestamp(x-axis) for each subID 
+#1b.)To represent in a single graph, use dropdown menus. First dropdown menu will be used to select the subID. Second dropdown menu will be used to select the column to be analyzed. (For eg: User wants to visualize heart rate activity column(dropdown 1) for subID 104(dropdown 2)) 
+#1c) Use a slider to control the range of timestamp.
+#1d)What insights could you glean from this plot? (There is no single correct answer)
+
 s<-read.csv(file=Path1)
 #reading csv and storing into dataframe fitness_data
 fitness_data <- data.frame(read.csv(file=Path1,header=TRUE, sep=","))
@@ -157,12 +148,9 @@ sharp rises and falls.
 
 Thus,the Accelaration,Gyroscope and Magnetometer values across x,y and z axis showed no clear pattern. 
  ")
-```
 
-<h2>Question-2</h2>
-<h4>What is undersampling and oversampling? Consider the dataset  subject.csv. Is there a case of undersampling or oversampling? If so, mention a technique to remedy the problem. Justify your answer. </h4>
+#Question 2:What is undersampling and oversampling? Consider the dataset  subject.csv. Is there a case of undersampling or oversampling? If so, mention a technique to remedy the problem. Justify your answer.
 
-```{r}
 cat("Data imbalance usually reflects an unequal distribution of classes within a dataset.
 
 Undersampling balances the dataset by reducing the size of the majority class. This method is used when quantity of data is sufficient.It is the process where you randomly delete some of the observations from the majority class in order to match the numbers with the minority class.
@@ -184,19 +172,16 @@ barplot(counts, main="Distribution of Dominant Hand",
 
 cat("From the graph, it can be inferred that the number of \"right\" entries is far more in abundance compared to \"left\"")
 
-```
 
-<h2>Question-3</h2>
-<h4> There are various techniques for sampling data. Suggest a sampling technique that you think is ideal for the data in fitness_data.csv, and justify your choice. </h4>
+# Question 3:There are various techniques for sampling data. Suggest a sampling technique that you think is ideal for the data in fitness_data.csv, and justify your choice.
 
-```{r}
-cat("The most suitable sampling technique that can be used here is Simple Random Sampling. Statefied samplimg based on the strata of age would have been more ideal as the data is related to fitness and age happens to be an important factor. However, since information regarding age is not available to us, Simple random sampling would be the most appropriate sampling technique. Selecting subjects completely at random from the larger population also yields a sample that is representative of the population itself.")
-```
+cat("The most suitable sampling technique that can be used here is 
+Simple Random Sampling. Statefied samplimg based on the strata of age would have been more ideal as the data is related to fitness and age happens to be an important factor. However, since information regarding age is not available to us, Simple random sampling would be the most appropriate sampling technique. Selecting subjects completely at random from the larger population also 
+yields a sample that is representative of the population itself.")
 
-<h2>Question-4</h2>
-<h4> In August 2018, Election Commission of India made Lok sabha 2014(Lok Sabha-2014 data.csv) data public so that analysts can use it for 2019 Lok Sabha election. Provide a suitable visualisation that accounts for the distribution of votes across the country.</h4>
 
-```{r}
+#Question 4: In August 2018, Election Commission of India made Lok sabha 2014(Lok Sabha-2014 data.csv) data public so that analysts can use it for 2019 Lok Sabha election. Provide a suitable visualisation that accounts for the distribution of votes across the country.
+
 loksabha=read.csv(Path4, header=TRUE)
 loksabha<-na.omit(loksabha)
 required <- subset(loksabha,select=c("longitude","latitude","VOTERS.TURN.OUT..IN...","Number.of.voters","MARGIN","PARTY","CONSTITUENCY"))
@@ -228,12 +213,7 @@ g <- g +
 #plot presentation
 g
 
-```
-
-<h2>Question-5</h2>
-<h4>Many good Bollywood movies were released in 2019, one of them being Kabir Singh. The file tweets.txt contains what people have tweeted about this movie. Provide suitable visualization that depicts the generals sentiment of the audience. </h4>
-
-```{r}
+#Question 5:Many good Bollywood movies were released in 2019, one of them being Kabir Singh. The file tweets.txt contains what people have tweeted about this movie. Provide suitable visualization that depicts the generals sentiment of the audience. 
 
 #reading the tweets data from the text file
 text <- readLines(Path5)
@@ -279,8 +259,3 @@ text_df %>%
                    max.words = 150)
 
 #Reference used for Question5: https://www.tidytextmining.com/tidytext.html
-```
-
-
-
-
