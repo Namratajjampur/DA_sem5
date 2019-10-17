@@ -1,0 +1,95 @@
+---
+title: "Assignment4"
+author: "Diya Chandra"
+date: "15/10/2019"
+output: html_document
+---
+
+```{r}
+#packages used
+#install.packages("resample")
+#install.packages("tseries")
+#install.packages("imputeTS")
+#install.packages("zoo")
+library(tidyverse) 
+library(tseries)
+library(resample)
+library(zoo)
+library(imputeTS)
+```
+
+```{r}
+#paths of datasets used
+train= read.csv("C:\\Users\\diyas\\Desktop\\SEM5\\Data_Analytics\\Assignment4\\DailyDelhiClimateTrain.csv")
+test= read.csv("C:\\Users\\diyas\\Desktop\\SEM5\\Data_Analytics\\Assignment4\\DailyDelhiClimateTest.csv")
+```
+Question2
+
+```{r}
+#2a
+#1)
+#using monthly resampled data
+#decompose into seasonal,trend and residual
+timeseries <- ts(train$meantemp, frequency =100)
+Comp <- decompose(timeseries)
+plot(Comp)
+#Comp
+
+#additive or multiplicative
+cat("meantemp is additive as there is constant seasonality")
+```
+
+```{r}
+#2a)
+#ii)
+#ploting acf and pacf for meantemp
+acf(train$meantemp)
+pacf(train$meantemp)
+
+cat("Inference from ACF plot\n")
+cat("If the ACF graph moves from 1 to 0 over a prolonged period of time, it implies that the data is non-stationary. Thus, it can be observed here that the meantemp is not staionary.")
+
+cat("Inference from Partial ACF plot\n")
+cat("")
+```
+
+
+```{r}
+#2b)
+#i)
+#plotting meantemp
+plot.ts(test$meantemp)
+cat("For a stationary series, the mean of the series should not be a function of time rather should be a constant.However, it is evident from the graph that the mean of the series depends on time.\n\n")
+
+#checking if stationary
+
+#statistical tests
+cat("Statistical tests \n")
+adf.test(train$meantemp)#p value is 0.64, thus non stationary(has unit root)
+
+kpss.test(train$meantemp)#p value is <0.05, thus, has unit root, not stationary
+
+#non-statistiscal tests
+cat("Non-statistical tests \n\n")
+
+#2b
+#ii)
+#converting to stationary using first order differential 
+diff1 <- diff(test$meantemp, differences=1)
+plot.ts(diff1)
+
+#augmented dickey fuller test for first order differential
+cat("ADF after First order diffrential\n\n")
+adf.test(diff1)#p value<0.05 , implies stationary(alternate)
+
+```
+```{r}
+timeseries <- ts(train$meantemp, frequency =100)
+#timeseries <- tsclean(timeseries)
+diffts <- diff(timeseries)
+difftscomponent <- decompose(diffts)
+adjusted_diffts <- diffts - difftscomponent$seasonal
+acf(adjusted_diffts)
+pacf(adjusted_diffts)
+```
+
